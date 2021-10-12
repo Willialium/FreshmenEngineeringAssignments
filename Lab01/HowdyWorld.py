@@ -15,13 +15,22 @@ def order(num):
     return str("{:0>4}").format(mini) + "." + str(maxi)
 
 
-num = input("Enter ")
+num = 2#input("Enter ")
 counter = 0
 while(num != 6174):
     counter += 1
-    print(str(num) + " > ", end="")
+    #print(str(num) + " > ", end="")
     mini = order(num)[0:order(num).find(".")]
     maxi = order(num)[order(num).find(".")+1:]
     num = int(maxi) - int(mini)
-print(str(6174))
-print("you got to 6174 in {} rounds".format(counter))
+#print(str(6174))
+#print("you got to 6174 in {} rounds".format(counter))
+
+
+arr = [1,2,3,4]
+arr.insert(3, [3.33, 3.66])
+print(arr)
+
+arr = [1,2,3,4]
+arr,
+print(arr)
