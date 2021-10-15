@@ -14,8 +14,11 @@ rhymeName = ""  # The name that will be used in the rhymes
 
 if(name[:1] in vowelList):  # Creates the rhyme name depending on if it starts with a vowel or not
     rhymeName = chr(ord(name[:1])+32) + name[1:]
-else:
-    rhymeName = name[1:]
+else:  # Removes the letters up to the first vowel
+    for i in name:
+        if i in vowelList or chr(ord(i)-32) in vowelList:
+            rhymeName = name[name.index(i):]
+            break
 
 
 #  Prints the rhyme
