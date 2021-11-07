@@ -27,18 +27,22 @@ energyList10 = [0.12, 83.31, 166.33, 249.43, 332.69, 416.23, 500.18, 584.72, 670
 enthalpyList10 = [10.07, 93.28, 176.37, 259.55, 342.94, 426.62, 510.73, 595.45, 681.01, 767.68, 855.8, 945.82, 1038.3, 1134.3] #list of enthalpys at 10 kPa
 entropyList10 = [0.0003, 0.2943, 0.5685, 0.826, 1.0691, 1.2996, 1.5191, 1.7293, 1.9316, 2.1271, 2.3174, 2.5037, 2.6876, 2.871] #list of entropys at 10 kPa
 userVal = 0 #users inputed temperature
-valuesinterpolate = [] # the outputted values
+userPressure = 0 #users inputed pressure
 outputs = [] #a list of the four calculated values
 
-# Prompt user for Temperature
+# Prompt user for Temperature and pressure
 # Store it in a variable
 userVal = float(input("Enter a temperature between 0 and 260 deg C: "))
+userPressure = float(input("Enter a pressure between 5 and 10 MPa: "))
 
-# Make sure temperature is in bounds
+# Make sure temperature and pressure is in bounds
 # Check if it is below the min or above the max
 # If it is, reprompt the user for data until it is in range
 while(userVal > 260 or userVal < 0):
     userVal = float(input("That temperature is not between 0 and 260 degrees C.\nPlease enter a valid temperature: "))
+
+while(userPressure > 10 or userPressure < 5):
+    userPressure = float(input("That pressure is not between 5 and 10 MPa\nPlease enter a valid pressure: "))
 
 
 #################################
@@ -76,8 +80,7 @@ def slopeFunc(minIndex, maxIndex):
 # Calculate values based off of the intropolation function
 # Return a list containing each calculated value
 
-def interpolate(actualTemp, minIndex, maxIndex, pressure):
-
+def interpolate5(actualTemp, minIndex, maxIndex):
     mList = slopeFunc(minIndex, maxIndex)
     propertiesList = []
 
@@ -95,11 +98,52 @@ def interpolate(actualTemp, minIndex, maxIndex, pressure):
 
     return propertiesList
 
-if(userVal % 20 == 0):
-    index = tempList.index(userVal)
-    valuesinterpolate = [volumeList5[index], energyList5[index], enthalpyList5[index], entropyList5[index]]
-else:
-    valuesinterpolate = interpolate(userVal, minIndex, maxIndex, 5)
+
+def interpolate10(actualTemp, minIndex, maxIndex):
+    mList = slopeFunc(minIndex, maxIndex)
+    propertiesList = []
+
+    x = mList[0] * (actualTemp - tempList[minIndex]) + volumeList10[minIndex]
+    propertiesList.append(x)
+
+    x = mList[1] * (actualTemp - tempList[minIndex]) + energyList10[minIndex]
+    propertiesList.append(x)
+
+    x = mList[2] * (actualTemp - tempList[minIndex]) + enthalpyList10[minIndex]
+    propertiesList.append(x)
+
+    x = mList[3] * (actualTemp - tempList[minIndex]) + entropyList10[minIndex]
+    propertiesList.append(x)
+
+    return propertiesList
+
+
+##### EXTRA CREDIT #######
+######## WILLIAM #########
+
+def newInterpolate(actualPressure):
+
+    # Get the four values at kPa = 5 and 10
+    values1 = interpolate5(userVal, minIndex, maxIndex)
+    values2 = interpolate10(userVal, minIndex, maxIndex)
+
+    # For each value, interpolate the four values using pressure as the x axis
+    # and the values as the y axis between kPa = 5 and 10
+    newVolumeSlope = (values2[0] - values1[0]) / 5
+    newVolume = newVolumeSlope * (actualPressure - 5) + values1[0]
+
+    newEnergySlope = (values2[1] - values1[1]) / 5
+    newEnergy = newEnergySlope * (actualPressure - 5) + values1[1]
+
+    newEnthalpySlope = (values2[2] - values1[2]) / 5
+    newEnthalpy = newEnthalpySlope * (actualPressure - 5) + values1[2]
+
+    newEntropySlope = (values2[3] - values1[3]) / 5
+    newEntropy = newEntropySlope * (actualPressure - 5) + values1[3]
+
+    # Return the four in the order they will be printed
+    return [newVolume, newEnergy, newEnthalpy, newEntropy]
+
 
 
 #################################
@@ -107,11 +151,15 @@ else:
 ########### HENRY ###############
 
 # Print the calculated volume to 7 decimal places
-print('Properties at', userVal,'deg C are:')
-print('Specific volume (m^3/kg): {:.7f}'.format(valuesinterpolate[0]))
+valuesinterpolate = newInterpolate(userPressure)
+print('Properties at', userVal,'deg C and', userPressure, 'MPa are:')
+print('Specific volume (m^3/kg): {}'.format(round(valuesinterpolate[0], 7)))
+
 # Print the internal energy to 2 decimal places
-print('Specific internal energy (kJ/kg): {:.2f}'.format(valuesinterpolate[1]))
+print('Specific internal energy (kJ/kg): {}'.format(round(valuesinterpolate[1], 2)))
+
 # Print the calculated enthalpy to 2 decimal places
-print('Specific enthalpy (kJ/kg): {:.2f}'.format(valuesinterpolate[2]))
+print('Specific enthalpy (kJ/kg): {}'.format(round(valuesinterpolate[2], 2)))
+
 # Print the calculated entropy to 4 decimal places
-print('Specific entropy (kJ/kgK): {:.4f}'.format(valuesinterpolate[3]))
+print('Specific entropy (kJ/kgK): {}'.format(round(valuesinterpolate[3], 4)))
