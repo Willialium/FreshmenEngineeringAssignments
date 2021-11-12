@@ -22,11 +22,12 @@ def valid(thisList):
             return False
     return validValues(thisList)
 
+
 # Checks if each defined term has valid data
 def validValues(thisList):
     isValid = True
     for data in thisList:
-        splitData = data.split(':') # code, value
+        splitData = data.split(':')  # code, value
         try:
             if splitData[0] == 'byr':
                 year = float(splitData[1])
@@ -52,7 +53,7 @@ def validValues(thisList):
                 else:
                     isValid = False
             elif splitData[0] == 'hcl':
-                checkList = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
+                checkList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
                 if splitData[1][0] != '#':
                     isValid = False
                 elif len(splitData[1][1:]) != 6:
@@ -73,16 +74,17 @@ def validValues(thisList):
 
     return isValid
 
+
 # Creates a dictionary of each passport and its formatting to print to the file
 total = {}
 format = {}
-with open('Lab10a_input.txt', 'r') as file:
+with open('Lab9a_input.txt', 'r') as file:
     text = file.readlines()
     temp = []
     counter = 0
     format[0] = []
     for line in text:
-        if(line != '\n'):
+        if (line != '\n'):
             temp += line.split(' ')
             for data in line.split(' ')[:-1]:
                 format[counter].append(' ')
@@ -98,14 +100,13 @@ with open('Lab10a_input.txt', 'r') as file:
     total[counter] = temp
 
     totalValid = 0
-    for i in range(len(total)-1, -1, -1):
+    for i in range(len(total) - 1, -1, -1):
         if not valid(total[i]):
             total.pop(i)
             format.pop(i)
-    print('There are',len(total),'valid passports')
+    print('There are', len(total), 'valid passports')
 
-
-#prints to the file
+# prints to the file
 with open('Lab10a_Act1b_valid.txt', 'a') as validFile:
     open('Lab10a_Act1b_valid.txt', 'w').write('')
     for key in total:

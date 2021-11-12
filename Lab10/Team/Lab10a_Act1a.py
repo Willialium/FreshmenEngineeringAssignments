@@ -25,7 +25,7 @@ def valid(thisList):
 # Creates a dictionary of each passport and its formatting to print to the file
 total = {}
 format = {}
-with open('Lab10a_input.txt', 'r') as file:
+with open('Lab9a_input.txt', 'r') as file:
     temp = []
     counter = 0
     format[0] = []
