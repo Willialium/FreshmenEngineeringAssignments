@@ -53,8 +53,7 @@ with open('Lab9a_input.txt', 'r') as file:
         if not valid(total[i]):
             total.pop(i)
             format.pop(i)
-    print('There are',len(total),'valid passports')
-
+    print('There are', len(total), 'valid passports')
 
 #prints to the file
 with open('Lab10a_Act1a_valid.txt', 'a') as validFile:
